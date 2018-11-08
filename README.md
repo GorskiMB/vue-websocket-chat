@@ -1,4 +1,6 @@
 # vue-websocket-chat
+En realtid Vue chatt applikation
+[Projektplan](https://github.com/GorskiMB/vue-websocket-chat/wiki)
 
 ## Project setup
 ```

@@ -147,6 +147,11 @@ wsFunctions.leaveChat = (client) => {
 };
 
 wsFunctions.sendChat = (client, data) => {
+  if (!isSet(data.message)) {
+    incomingMessageError(client, `message is missing`);
+    return;
+  }
+
   broadcast({
     action: 'incomingChat',
     data: {

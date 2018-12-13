@@ -3,27 +3,17 @@ En realtid Vue chatt applikation
 
 * [Projektplan](https://github.com/GorskiMB/vue-websocket-chat/wiki)
 
-## Project setup
+## Initera projektet
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Compilera och kör projektet i utvecklingsläge
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Starta WebSocket servern
 ```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
+npm start
 ```

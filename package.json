@@ -8,15 +8,16 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.6.1",
+    "css-reset-and-normalize-sass": "^0.1.2",
     "is-valid-json": "^1.0.2",
     "vue": "^2.5.17",
-    "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "ws": "^6.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-eslint": "^3.0.5",
-    "@vue/cli-service": "^3.0.5",
+    "@vue/cli-plugin-eslint": "^3.2.0",
+    "@vue/cli-service": "^3.2.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-plugin-vue": "^5.0.0-0",

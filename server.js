@@ -179,6 +179,12 @@ wsFunctions.joinChat = (client, data) => {
     return;
   }
 
+  // Broadcast the joined client
+  broadcast({
+    action: 'clientJoin',
+    nickname: data.nickname,
+  });
+
   // Include the nickname in the client object
   client.nickname = data.nickname;
   // Add the client to the joined clients array
@@ -190,12 +196,6 @@ wsFunctions.joinChat = (client, data) => {
     nickname: data.nickname,
     message: `Welcome ${data.nickname}!`,
   }));
-
-  // Broadcast the joined client
-  broadcast({
-    action: 'clientJoin',
-    nickname: data.nickname,
-  });
 };
 
 // Remove client from the chat

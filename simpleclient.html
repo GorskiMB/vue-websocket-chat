@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Simple Chat Client</title>
+
+  <style media="screen">
+
+  </style>
+
+</head>
+<body>
+
+  <ul class="chat">
+
+  </ul>
+
+  <form>
+    <input class="input" type="text" placeholder="Message...">
+  </form>
+
+  <button type="button" name="changeName">Change Nickname</button>
+
+  <script type="text/javascript">
+    let chatDOM = document.querySelector('.chat');
+    let formDOM = document.querySelector('form');
+    let inputDOM = document.querySelector('.input');
+    let changeNameBtn = document.querySelector('button');
+    let nickname = "Skrub";
+    const func = new Map();
+
+    changeNameBtn.addEventListener('click', () => {
+      let name = prompt('Type in your new nickname').trim();
+      if (name != "") {
+        changeNickname(name);
+      }
+    });
+
+    func.set('broadcast', (data) => {
+      pushChat(broadcastHTML(data.message));
+    });
+
+    func.set('incomingChat', (data) => {
+      data = data.data;
+      pushChat(chatHTML(data.time, data.name, data.message));
+    });
+
+    const convertURItoWS = uri => {
+      let loc = uri, new_uri;
+      if (loc.protocol === "https:") {
+          new_uri = "wss:";
+      } else {
+          new_uri = "ws:";
+      }
+
+      if (loc.protocol === "file:") {
+        new_uri += "//localhost";
+      } else {
+        new_uri += "//" + loc.hostname;;
+      }
+      return new_uri
+    }
+
+    const ws = new WebSocket(convertURItoWS(window.location));
+
+    const init = () => {
+      let name = "";
+      do {
+        name = prompt('Type in your nickname').trim();
+      } while (name == "");
+
+      joinChat(name);
+    }
+
+    const chatHTML = (time, name, message) => {
+      time = new Date(time).toLocaleTimeString();
+      let elem = document.createElement('li');
+      elem.classList.add('chat');
+      let text = document.createTextNode(`[${time}] ${name}: ${message}`);
+      elem.append(text);
+      return elem;
+    }
+
+    const broadcastHTML = message => {
+      let elem = document.createElement('li');
+      elem.classList.add('broadcast');
+      let text = document.createTextNode(message);
+      elem.append(text);
+      return elem;
+    }
+
+    const pushChat = elem => {
+      chatDOM.append(elem);
+    }
+
+    const sendToServer = obj => {
+      ws.send(JSON.stringify(obj));
+    }
+
+    const joinChat = name => {
+      sendToServer({
+        action: 'joinChat',
+        nickname: name
+      });
+    }
+
+    const sendChat = message => {
+      sendToServer({
+        action: 'sendChat',
+        message: message
+      });
+    }
+
+    const changeNickname = name => {
+      sendToServer({
+        action: 'changeNickname',
+        nickname: name
+      });
+    }
+
+    ws.onopen = event => {
+      init();
+    };
+
+    ws.onmessage = event => {
+      let data = JSON.parse(event.data);
+      console.log('Recieved data from server', data);
+      func.get(data.action)(data);
+    }
+
+    formDOM.onsubmit = event => {
+      event.preventDefault();
+      let message = inputDOM.value.trim();
+      inputDOM.value = "";
+      if (message == "") return;
+      sendChat(message);
+    }
+
+  </script>
+</body>
+</html>
